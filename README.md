@@ -33,6 +33,6 @@ https://cron-job.org/ running the script:  TrabajoDeCronp.php
         <img
             alt="PHP"
             src="https://github.com/Alexanderh1988/Recordatorios/blob/main/Foto.png?raw=true"
-            width="150">
+            width="900">
     </a>
 </div>
