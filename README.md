@@ -32,7 +32,7 @@ https://cron-job.org/ running the script:  TrabajoDeCronp.php
     <a href="https://php.net">
         <img
             alt="PHP"
-            src="https://www.php.net/images/logos/new-php-logo.svg"
+            src="https://github.com/Alexanderh1988/Recordatorios/blob/main/Foto.png?raw=true"
             width="150">
     </a>
 </div>
