@@ -124,5 +124,12 @@ background-color: #fff;
     td:nth-of-type(6):before { content: "Comentarios:   "; }
     td:nth-of-type(7):before { content: "Persona a cargo:   "; }*/
 	
-	
 }
+
+
+.input-group {
+    display: flex;
+    flex-flow: row wrap;
+    align-items: center;
+}
+

@@ -1,390 +1,309 @@
-    <?php
-    //servidor
-    require_once $_SERVER['DOCUMENT_ROOT'].'/Recordatorios/core/init.php';
-      
+<?php
+//servidor
+//require_once $_SERVER['DOCUMENT_ROOT'].'/Recordatorios/core/init.php';
+require_once 'core/init.php';
 
-       $factor=86400;
-    ?>
-    <head> 
-      <title>Recordatorios</title>  
+$factor = 86400;
+?>
+<head>
+    <title>Recordatorios</title>
 
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-      <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css"/>
+    <script src="https://code.jquery.com/jquery-2.1.3.js"></script>
+
+    <!-- no funciona post con el siguiente codigo -->
+    <script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.js"></script>
+
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <link rel="stylesheet" href="/resources/demos/style.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link rel="stylesheet" href="css.css">
+
+    <script src="scripts.js"></script>
+
+</head>
+
+<?php
 
 
-      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-      <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-      <link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css" />
-      <script src="http://code.jquery.com/jquery-2.1.3.js"></script>
+// echo 'no post';
 
-      <!-- no funciona post con el siguiente codigo -->
-      <script src="http://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.js"></script> 
+if ($_POST) {
 
-      <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
-      <link rel="stylesheet" href="/resources/demos/style.css">
-      <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
-      <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>   
-      <link rel="stylesheet" href="css.css">
+    $numero = (int)$_POST['num'];
+    $i = 0;
 
-      <script>
+    while ($i < $numero) {
 
-        function mostrar() {
+        $tiempo = $_POST['' . (string)$i . '&tiempo'] == null ? 0 : $_POST['' . (string)$i . '&tiempo'] * $factor + time();
+        $fecha = $_POST['' . (string)$i . '&fecha'];
+        $mensaje = $_POST['' . (string)$i . '&mensaje'];
+        $asunto = $_POST['' . (string)$i . '&asunto'];
+        $fechaingreso = date('Y-m-d');
+        $recurrente = $_POST['' . (string)$i . '&recurrente'] == 'checked' ? "1" : "0";
 
 
-  //        alert("doacciona");
+        //  if (substr($asunto, $asunto . length() - 2, $asunto . length()) == "R") {
 
-  var x = document.getElementsByClassName("eliminar");
-  var i;
-  for (i = 0; i < x.length; i++) {
+        //     $rep = (int)substr($asunto, $asunto . length() - 1, $asunto . length());
 
-      if (x[i].style.display === "none") {
-        //alert("none");
-      x[i].style.display = "block";
-      // document.getElementsByClassName("eliminar").style.display = "none";
-
-    } 
-    else {
-      //else if (x[i].style.display === "hidden") {
-     // alert("hidden");
-      x[i].style.display = "none";
-      // document.getElementsByClassName("eliminar").style.display = "hidden";
-    }
-  }
-
-  }
-
-  function editar(){
-
-    var y = document.getElementsByClassName("editar");
-    var i;
-    for (i = 0; i < y.length; i++) {
-
-      if (y[i].style.display === "none") {
-        y[i].style.display = "block";
-      } 
-      else {
-        y[i].style.display = "none";
-
-      }
-    }
-  }
-
-    //para cambio de formato: 
-    $( function() {
-      $( ".datepicker" ).datepicker({ dateFormat: 'yy-mm-dd' });
-    } );
-
-    function callme() {
-
-      $( window ).load(function() {
-        if (window.location.href.indexOf('reload')==-1) {
-         window.location.replace(window.location.href+'?reload');
-       }
-     });
-      location.reload();
+        //     for ($i = 0; $i < $rep; $i++) {
+        //          $insertsql = "INSERT INTO `recordatoriosp`(`time`, $rep*$fecha, `mensaje`, `asunto`,`desactivado`,`fechaingreso`,`recurrente`) VALUES ('$tiempo','$fecha','$mensaje','$asunto','1','$fechaingreso','$recurrente')";
+        //          var_dump($insertsql);
+        //      }
+        //   } else {
+        //en hstech:
+        $insertsql = "INSERT INTO `recordatoriosp`(`time`, `fecha`, `mensaje`, `asunto`,`desactivado`,`fechaingreso`,`recurrente`) VALUES ('$tiempo','$fecha','$mensaje','$asunto','1','$fechaingreso','$recurrente')";
+        $i++;
+        // }
+        $db->query($insertsql);
     }
 
-    
-  </script>
+}  //final de POST principal
 
-  </head> 
+?>
 
-    <?php
-   
+<body>
 
-    // echo 'no post';
+<div id="login-form" style="width: 95%;">  <!-- 1 -->
+    <h2 class="text-center">&nbsp&nbsp Lista de recordatorios pendientes </h2>
 
-            if($_POST){
-
-                  
-            $numero=(int)$_POST['num']; 
-            $i=0;
-
-            while($i <$numero) {
-         
-            //  if($_POST[''.(String)$i.'&tiempo']=='0'){ $time= $_POST[''.(String)$i.'&tiempo']+time(); } else { $time='66666666'; }
-            //if($_POST[''.(String)$i.'&tiempo']!='0') { $tiempo= (String)((int)$_POST[''.(String)$i.'&tiempo']*$factor+time()); } else {  $tiempo='0'; }
-            // if(((int)$_POST[''.(String)$i.'&tiempo'])-time())>10) { $tiempo= (String)((int)$_POST[''.(String)$i.'&tiempo']*$factor+time()); } else {  $tiempo='0'; }$_POST[''.(String)$i.'&tiempo']==null ||&& $_POST[''.(String)$i.'&tiempo']==null
-
-  if($_POST[''.(String)$i.'&tiempo']==null) { 
-            
-  //             if(!isset($_POST[''.(String)$i.'&tiempo'])) { 
-                 $tiempo=0;              
-                 } else { 
-                $tiempo= $_POST[''.(String)$i.'&tiempo']*$factor+time(); 
-                   }
-
-           //   $tiempo= $_POST[''.(String)$i.'&tiempo']*$factor+time();
-          //    $tiempo = $_POST[''.(String)$i.'&tiempo']+time();
-
-              $fecha= $_POST[''.(String)$i.'&fecha'];
-              $mensaje= $_POST[''.(String)$i.'&mensaje']; 
-              $asunto= $_POST[''.(String)$i.'&asunto'];
-              $fechaingreso= date('Y-m-d');
-              
-
-if(substr($asunto, $asunto.length()-2,$asunto.length())=="R"){
-
-  $rep = (int)substr($asunto, $asunto.length()-1,$asunto.length());
-
-  for($i=0;$i<$rep;$i++){
-
-  $insertsql="INSERT INTO `rememberhstech`(`time`, $rep*$fecha, `mensaje`, `asunto`,`desactivado`,`fechaingreso`) VALUES ('$tiempo','$fecha','$mensaje','$asunto','1','$fechaingreso')";
-              
-             $db->query($insertsql);
-
-  }
-}
-else{ 
-          // $tiempovar=$_POST[''.(String)$i.'&tiempovar'];
-           // if($tiempo != null && $fecha != null){
-            //en hstech:
-                $insertsql="INSERT INTO `rememberhstech`(`time`, `fecha`, `mensaje`, `asunto`,`desactivado`,`fechaingreso`) VALUES ('$tiempo','$fecha','$mensaje','$asunto','1','$fechaingreso')";
-              //var_dump($insertsql);
-
-              $db->query($insertsql);
-
-              $i++;
-            }
-            }
-
-
-           }  //final de POST principal
-
-          ?>
-
-  <body> 
-
-    <div id="login-form" style="width: 95%;">  <!-- 1 -->
-      <h2 class="text-center">&nbsp&nbsp Lista de recordatorios pendientes    
-
-   <?php    
-  // var_dump($_POST[''.$i.'&tiempo']).' - '.var_dump(isset($_POST[''.$i.'&tiempo']));
-  ?>
-      </h2>
-
-      <div data-role="header">
-        <!-- <h1>jQuery Mobile : Reflow</h1> -->
-      </div>
-
-      <div role="main" class="ui-content">   <!-- 2 -->
-
-       <!--  <form action="index.php" method="post">  -->
+    <div role="main" class="ui-content">   <!-- 2 -->
 
         <form action="index.php" method="post">
 
-          <table data-role="table" class="ui-responsive table-stroke">
+            <table data-role="table" class="ui-responsive table-stroke">
 
-            <!-- Set the Data-role the Table , the reflow is applied by   default-->
-            <thead>
-              <tr>
+                <!-- Set the Data-role the Table , the reflow is applied by   default-->
+                <thead>
+                <tr>
+                    <th style="width: 20%;">Asunto</th>
+                    <th style="width: 10%;">Dias de aviso</th>
+                    <th style="width: 10%;">Fecha de control</th>
+                    <th style="width: 10%;">Fecha ingreso</th>
+                    <th style="width: 50%;">Mensaje</th>
+                    <th style="width: 5%;">Recurrente</th>
+                    <!-- aca no funciona post -->
+                </tr>
+                </thead>
+                <tbody>
 
-                <th>Asunto</th>           
-                <th>Dias de aviso</th>           
-                <th>Fecha de control</th>           
-                <th>Fecha ingreso</th>           
-                <th>Mensaje</th> 
-                <!-- aca no funciona post -->
-              </tr>
-            </thead>
-            <tbody>
+                <!-- //aca no funciona post -->
 
-             <!-- //aca no funciona post -->
+                <?php
 
-             <?php 
-    
+                if (isset($_GET['delete'])) {
 
-    if(isset($_GET['delete'])){
+                    $deleteid = $_GET['id'];
 
-      $deleteid= $_GET['id'];
+                    $deleteidquery = "DELETE FROM `recordatoriosp` WHERE id=$deleteid";
+                    $db->query($deleteidquery);
 
-      //$deleteidquery="UPDATE desactivado FROM `remember` VALUES '2' WHERE id=$deleteid";             
-      $deleteidquery="DELETE FROM `rememberhstech` WHERE id=$deleteid";   
-      $db->query($deleteidquery);
+                    header("Location: index.php?todo");
 
-      header("Location: index.php?todo");
+                }
+                //en hstech:
 
-    }
-            //en hstech:
-            //$sql = "SELECT * FROM remember WHERE desactivado=1";
-             //muestra los ultimos 10 para que no haya una lista tan grande
-        if(isset($_GET['todo'])) {
-                  $sql = "SELECT * FROM `rememberhstech` WHERE desactivado=1";
-          } 
-                //else if(!isset($_GET['todo'])) {
-                  else {
-                  $sql="SELECT * FROM `rememberhstech` WHERE desactivado=1 ORDER BY id ASC LIMIT 10";
-          }
+                if (isset($_GET['todo'])) {
+                    $sql = "SELECT * FROM `recordatoriosp` WHERE desactivado=1";
+                } //else if(!isset($_GET['todo'])) {
+                else {
+                    $sql = "SELECT * FROM `recordatoriosp` WHERE desactivado=1 ORDER BY id ASC LIMIT 30";
+                }
 
-          if(isset($_POST['busqueda'])){
+                if (isset($_POST['busqueda'])) {
 
-          $BusquedaParcial= (String)$_POST['busqueda'];
+                    $BusquedaParcial = (string)$_POST['busqueda'];
 
-          var_dump($BusquedaParcial);
-          echo 'valor es'.$BusquedaParcial;
+//                    var_dump($BusquedaParcial);
+//                    echo 'valor es' . $BusquedaParcial;
 
-        
-   $sql="SELECT * FROM `rememberhstech` WHERE desactivado=1 AND asunto LIKE  '%".$BusquedaParcial."%' OR  mensaje LIKE '%".$BusquedaParcial."%'";  
+                    $sql = "SELECT * FROM `recordatoriosp` WHERE desactivado=1 AND asunto LIKE '%" . $BusquedaParcial . "%' OR  mensaje LIKE '%" . $BusquedaParcial . "%'";
 
-   # $sql="SELECT * FROM `recordatoriosp` WHERE desactivado=1 AND ( asunto LIKE '%pro%' OR mensaje LIKE '%pro%')";
+                }
 
-     //  $sql="SELECT * FROM `recordatoriosp` WHERE desactivado=1 ORDER BY id ASC LIMIT 10";
-      var_dump($sql);
-      }
+                $featured = $db->query($sql);
 
+                $total = 0;
+                $k = 0;
+                ?>
+                <?php while ($dato = mysqli_fetch_assoc($featured)):
 
-             $featured = $db->query($sql);  
+                    $id = $dato['id'];
+                    $asunto = $dato['asunto'];
 
-                           $total=0;
-             $k=0;
-             ?>
-             <?php while($dato= mysqli_fetch_assoc($featured)):
+                    if (round(($dato['time'] - time()) / $factor) < 0) {
+                        $timet = 0;
+                    } else {
+                        $timet = round(($dato['time'] - time()) / $factor);
+                    }
 
+                    $time = $dato['time'];
+                    $fecha = $dato['fecha'];
+                    $mensaje = $dato['mensaje'];
+                    $desactivado = $dato['desactivado'];
+                    $fechaingreso = $dato['fechaingreso'];
+                    $recurrente = $dato['recurrente'];
 
-              // if(!isset($_GET['Editar'])){
+                    ?>
+                    <tr>
 
+                        <td><?= $asunto; ?></td>
+                        <!-- <td><?= $time; ?> </td> -->
+                        <td><?= $timet; ?> </td>
+                        <td><?= $fecha; ?></td>
+                        <td><?= $fechaingreso; ?></td>
+                        <td>
+                            <?= $mensaje; ?>
+                            <a style="display: none;" data-ajax="false" href="index.php?delete&id=<?= $id; ?>"
+                               class="eliminar">
+                                <span class="glyphicon glyphicon-trash pull-right"></span>
 
-                $id=$dato['id'];
-                $asunto=$dato['asunto'];
-                
-                //$time=$dato['time'];         
-                if(round(($dato['time']-time())/$factor)<0){$timet=0; } else {$timet=round(($dato['time']-time())/$factor);}
+                                <a style="display: none;" data-ajax="false" href="index.php?editar&id=<?= $id; ?>"
+                                   class="editar">
+                                    <span class="glyphicon glyphicon-pencil pull-right"></span>
+                        </td>
+                        <td>
+                        <td>
+                            <?php
+                            if ($recurrente == '1') {
+                                ?> <span class="glyphicon glyphicon-thumbs-up pull-left"></span> <?php
+                            } else {
+                                ?> <span class="glyphicon glyphicon-thumbs-down pull-left"></span> <?php
+                            }
+                            ?>
+                        </td>
+                        </td>
+                    </tr>
 
-                $time = $dato['time'];
-                
-                $fecha= $dato['fecha'];
-                $mensaje= $dato['mensaje'];
-                $desactivado= $dato['desactivado'];
-                $fechaingreso= $dato['fechaingreso'];
-
-              //  }
-              
-              ?>
-              <tr> 
-
-                <td><?= $asunto; ?></td>                 
-                <!-- <td><?= $time; ?> </td> -->
-                <td><?= $timet; ?> </td>
-                <td><?= $fecha; ?></td> 
-                <td><?= $fechaingreso; ?></td>            
-                <td>
-
-                  <?= $mensaje; ?>     
-
-                <a style="display: none;" data-ajax="false" href="index.php?delete&id=<?= $id; ?>" class="eliminar">
-              <span class="glyphicon glyphicon-trash pull-right" ></span>
-
-               <a style="display: none;" data-ajax="false" href="index.php?editar&id=<?= $id; ?>" class="editar">
-              <span class="glyphicon glyphicon-pencil pull-right" ></span>
-
-
-            </a>  
-
-             </td>
-
-              </tr>
-
-              <?php
+                <?php
 
 
-             endwhile;  $numero=0;  ?>
+                endwhile;
+                $numero = 0; ?>
 
-          <!--  <form action="index.php" method="post">  -->
+                <!--  <form action="index.php" method="post">  -->
 
-            <?php
-            if(isset($_GET['add'])){
+                <?php
+                if (isset($_GET['add'])) {
 
-             $numero=isset($_GET['add'])?(int)$_GET['add']:0;
-             $numero=(int)$_GET['add'];
+                    $numero = isset($_GET['add']) ? (int)$_GET['add'] : 0;
+                    $numero = (int)$_GET['add'];
 
-             if((int)$_GET['add']==0) $numero=1;
-             if((int)$_GET['add']==1) $numero=2;
-             if((int)$_GET['add']==2) $numero=3;
-             if((int)$_GET['add']==3) $numero=4;
-             if((int)$_GET['add']==4) $numero=5;
-             if((int)$_GET['add']==5) $numero=6;
-             if((int)$_GET['add']==6) $numero=7;
+                    if ((int)$_GET['add'] == 0) $numero = 1;
+                    if ((int)$_GET['add'] == 1) $numero = 2;
+                    if ((int)$_GET['add'] == 2) $numero = 3;
+                    if ((int)$_GET['add'] == 3) $numero = 4;
+                    if ((int)$_GET['add'] == 4) $numero = 5;
+                    if ((int)$_GET['add'] == 5) $numero = 6;
+                    if ((int)$_GET['add'] == 6) $numero = 7;
 
-             $i=0;
-             while($i <$numero) {
-              ?>
+                    $i = 0;
+                    while ($i < $numero) {
+                        ?>
 
-              <tr> <!-- row 3-->
+                        <tr> <!-- row 3-->
 
-                <th>      <input   type="text" name="<?= $i; ?>&asunto">   </th>
-                <td  >    <input  type="number" name="<?= $i; ?>&tiempo">    </td>
-                <td  >    <input class="datepicker"  type="text" name="<?= $i; ?>&fecha">     </td>
-                <td>      <h4> <?= date('Y-m-d'); ?>  </h4>  </td>
-                <td  >    <input    type="text" name="<?= $i; ?>&mensaje">  </td>
+                            <th><input type="text" name="<?= $i; ?>&asunto"></th>
+                            <td><input type="number" name="<?= $i; ?>&tiempo"></td>
+                            <td><input class="datepicker" type="text" name="<?= $i; ?>&fecha"></td>
+                            <td><h4> <?= date('Y-m-d'); ?>  </h4></td>
 
-              </tr>  
+                            <td>
+                                <input type="text" name="<?= $i; ?>&mensaje">
 
-              <?php $i++; }   }   ?> 
+                                <a style="display: none;" href="index.php?editar&id=<?= $id; ?>">
+                                    <span class="glyphicon glyphicon-pencil pull-right"></span>
+                                </a>
 
-            </tbody>
+                            </td>
 
-          </table> 
+                            <td>
+                                <div style="margin-top: 30%;">
+                                    <input name="<?= $i; ?>&recurrente" type="checkbox" value="checked">
+                                </div>
+                            </td>
 
-     <div class="ui-field-contain">         <hr>
-     
-     <?php if(isset($_GET['add'])){  ?>
+                        </tr>
 
-  
+                        <?php $i++;
+                    }
+                } ?>
 
-       <button data-theme="c" type="submit" data-inline="true" onclick="callme()">Guardar datos</button>
+                </tbody>
 
-        <?php } ?>
+            </table>
 
-          <!-- <input data-theme="a" type="hidden" ame="fechaingreso" value="<?= date("d/m/Y"); ?>"> -->
-       <input data-theme="a" type="hidden" name="num" value="<?= $numero; ?>">
-          <!-- <input data-theme="a" type="hidden" name="tiempovar" value="<?= time(); ?>"> -->
+            <div class="ui-field-contain">
+                <hr>
 
-       <a data-ajax="false" href="index.php?add=<?= $numero; ?>" data-role="button" data-inline="true">Agregar item</a>
+                <?php if (isset($_GET['add'])) { ?>
 
-        <!--   <a data-theme="e" rel="external" href="index.php" data-role="button" data-inline="true" data-theme="b">Actualizar</a> -->  
+                    <button data-theme="c" type="submit" data-inline="true" onclick="callme()">Guardar datos</button>
 
-       <a data-theme="d" rel="external" onclick="editar();" data-role="button" data-inline="true" data-theme="b">Editar</a>
+                <?php } ?>
 
-       <a data-theme="c" rel="external" href="index.php" data-role="button" data-inline="true" data-theme="b">Cancelar</a>
+                <!-- <input data-theme="a" type="hidden" ame="fechaingreso" value="<?= date("d/m/Y"); ?>"> -->
+                <input data-theme="a" type="hidden" name="num" value="<?= $numero; ?>">
+                <!-- <input data-theme="a" type="hidden" name="tiempovar" value="<?= time(); ?>"> -->
 
-       <a data-theme="c" rel="external" href="index.php?todo" data-role="button" data-inline="true" data-theme="b">Mostrar todo</a>
+                <a data-ajax="false" data-mini="false" href="index.php?add=<?= $numero; ?>" data-role="button"
+                   data-inline="true">Agregar item</a>
 
-       <a data-theme="c" rel="external" onclick="mostrar();" data-role="button" data-inline="true" data-theme="b">Eliminar</a>
+                <!--   <a data-theme="e" rel="external" href="index.php" data-role="button" data-inline="true" data-theme="b">Actualizar</a> -->
 
-      <input type="text" data-role="none" placeholder="Escriba" name="busqueda" >
+                <a data-theme="d" data-mini="false" rel="external" onclick="editar();" data-role="button"
+                   data-inline="true" data-theme="b">Editar</a>
 
-        <button data-theme="c" value="submit" type="submit" data-inline="true">Buscar</button>
-         
-       
-     </form>
+                <a data-theme="c" data-mini="false" rel="external" href="index.php" data-role="button"
+                   data-inline="true"
+                   data-theme="b">Cancelar</a>
 
-           <!--  <a data-theme="c" rel="external" onclick="mostrar();" data-role="button" data-inline="true" data-theme="b">Repetir (solo fecha)</a>
+                <a data-theme="c" data-mini="false" rel="external" href="index.php?todo" data-role="button"
+                   data-inline="true" data-theme="b">Mostrar todo</a>
+
+                <a data-theme="c" data-mini="false" rel="external" onclick="mostrar();" data-role="button"
+                   data-inline="true" data-theme="b">Eliminar</a>
+
+                <input type="text" data-mini="false" data-role="none" placeholder="Escriba" name="busqueda">
+
+                <button data-theme="c" data-mini="false" value="submit" type="submit" data-inline="true">Buscar</button>
+                <!--<button data-theme="c" data-mini="true" onclick="recurrent();" data-inline="true">Recurrente</button>-->
+
+        </form>
+
+        <!--  <a data-theme="c" rel="external" onclick="mostrar();" data-role="button" data-inline="true" data-theme="b">Repetir (solo fecha)</a>
             <input data-inline="true" display="hidden" data-theme="a" type="number" name="num" value="<?= $numero; ?>"> -->
-          
-             <a data-theme="c" rel="external" href="historico.php" data-role="button" data-inline="true" data-theme="b"  class="btn btn-secondary pull-right">Ver historial</a> 
 
-          </div>
+        <a data-theme="c" data-mini="true" rel="external" href="historico.php" data-role="button" data-inline="true"
+           data-theme="b" class="btn btn-secondary pull-right">Ver historial</a>
 
-          (  <?php  echo time();   ?>) 
+    </div>
 
-      
-         <!-- ( Tiempo actual Unix: <?php  echo time();  echo ' - PHP v: ' . phpversion();  ?>) -->
-
-       
-      </div>          <!-- 1 -->
-    </div>    <!-- 2 -->
+    ( <?php echo time(); ?>)
 
 
-  </form>
+    <!-- ( Tiempo actual Unix: <?php echo time();
+    echo ' - PHP v: ' . phpversion(); ?>) -->
 
 
-    
-
-  </body>
-
+</div>          <!-- 1 -->
+</div>    <!-- 2 -->
 
 
-    
+</form>
+
+
+</body>
+
+
+

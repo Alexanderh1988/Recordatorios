@@ -1,53 +1,52 @@
-  <?php
-  //servidor
-  require_once $_SERVER['DOCUMENT_ROOT'].'/Recordatorios/core/init.php';
+<?php
+//servidor
+require_once('core/init.php');
 
+$sql = "SELECT * FROM `recordatoriosp` WHERE desactivado=1 ORDER BY id DESC LIMIT 60";
 
-  $sql="SELECT * FROM `rememberhstech` WHERE desactivado=1";
+$featured = $db->query($sql);
+$total = 0;
+$k = 0;
 
+while ($dato = mysqli_fetch_assoc($featured)):
 
-  $featured = $db->query($sql);   
-  $total=0;
-  $k=0;
-  ?>
-  <?php while($dato= mysqli_fetch_assoc($featured)):
+    $id = $dato['id'];
+    $asunto = $dato['asunto'];
+    $time = $dato['time'];
+    $fecha = $dato['fecha'];
+    $mensaje = $dato['mensaje'];
+    $desactivado = $dato['desactivado'];
+    $recurrente = $dato['recurrente'];
 
+    //echo '(int)$time: ' . (int)$time;
+    //echo '|';
+    //echo 'time() : ' . time();
 
-    $id=$dato['id'];
-    $asunto=$dato['asunto'];
-    $time=$dato['time'];
-    $fecha= $dato['fecha'];
-    $mensaje= $dato['mensaje'];
-    $desactivado= $dato['desactivado'];
+    if (((int)strtotime($fecha) + 14000 < time() && strtotime($fecha) != strtotime("0000-00-00")) || ((int)$time < time() && $time != '0')) {
 
+        $to = "ahauck_88@hotmail.com";
+        $subject = $asunto;
+        $txt = $mensaje;
+        $headers = "From: notificaciones@hstech.cl" . "\r\n";
 
-    if(((int)strtotime($fecha)+14000<time() && strtotime($fecha)!='-62169984000') || ((int)$time<time() && $time!='0')) {
+        mail($to, $subject, $txt, $headers);
 
-            //  if(strtotime($fecha)<time()) {
-
-      $to = "youEmail";
-      $subject = $asunto;
-      $txt = $mensaje;
-      $headers = "From: notificaciones@yourDomain.cl" . "\r\n";
-
-      mail($to,$subject,$txt,$headers);
-
-              //en hstech:
-      $insertsql2="UPDATE `rememberhstech` SET `desactivado`='0' WHERE id=$id";             
-      $db->query($insertsql2);
+        //en hstech:
+        if ($recurrente == '0') {
+            $insertsql2 = "UPDATE `recordatoriosp` SET `desactivado`='0' WHERE id=$id";
+        } else {
+            if ($fecha = $dato['fecha'] == "0000-00-00") {  // una vez al año
+                $fecha = date("Y-m-d", substr(strval(strtotime($fecha) + 1800000), 0, 10));
+                $insertsql2 = "UPDATE `recordatoriosp` SET `desactivado`='1' AND `fecha`=$fecha WHERE id=$id";
+            } else {  //se establecio por periodos fijos, se vuele a repetir en 20 dias mas
+                $time = (int)$time + 31556926 - 8000;
+                $insertsql2 = "UPDATE `recordatoriosp` SET `desactivado`='1' AND `time`= $time  WHERE id=$id";
+            }
+        }
+        $db->query($insertsql2);
 
     }
 
-         //  $conta++;
-         // }  // fin de if de instruccion por tramo
-
-             // $insertsql4="UPDATE `desactivado` SET `desactivado`='$conta' WHERE id=1";             
-             //  $db->query($insertsql4);
-
-  endwhile; 	?>
-
-  <!--  <form action="index.php" method="post">  -->
-
-  
-
+endwhile; ?>
+ 
    
