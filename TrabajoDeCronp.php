@@ -34,17 +34,16 @@ while ($dato = mysqli_fetch_assoc($featured)):
         //en hstech:
         if ($recurrente == '0') {
             $insertsql2 = "UPDATE `recordatoriosp` SET `desactivado`='0' WHERE id=$id";
-        } else {
-            if ($fecha = $dato['fecha'] == "0000-00-00") {  // una vez al año
-                $fecha = date("Y-m-d", substr(strval(strtotime($fecha) + 1800000), 0, 10));
-                $insertsql2 = "UPDATE `recordatoriosp` SET `desactivado`='1' AND `fecha`=$fecha WHERE id=$id";
-            } else {  //se establecio por periodos fijos, se vuele a repetir en 20 dias mas
-                $time = (int)$time + 31556926 - 8000;
-                $insertsql2 = "UPDATE `recordatoriosp` SET `desactivado`='1' AND `time`= $time  WHERE id=$id";
+        } else { //se repite
+            if (strtotime($fecha) == strtotime("0000-00-00")) { //se establecio por periodos fijos, se vuele a repetir en 20 dias mas
+                $time = strval((int)$time + 1800000 - 8000);
+                $insertsql2 = "UPDATE `recordatoriosp` SET  `time`= $time  WHERE id=$id";
+            } else {   // una vez al año
+                $fecha = (string)date("Y-m-d", substr(strval(strtotime($fecha) + 31556926), 0, 10));
+                $insertsql2 = "UPDATE `recordatoriosp` SET  `fecha`=$fecha WHERE id=$id";
             }
         }
         $db->query($insertsql2);
-
     }
 
 endwhile; ?>

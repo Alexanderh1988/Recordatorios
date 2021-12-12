@@ -104,15 +104,23 @@ if ($_POST) {
                 if (isset($_GET['delete'])) {
 
                     $deleteid = $_GET['id'];
-
                     $deleteidquery = "DELETE FROM `recordatoriosp` WHERE id=$deleteid";
                     $db->query($deleteidquery);
 
                     header("Location: index.php?todo");
+                }
 
+                if (isset($_GET['recurrente'])) {
+
+                    $recurrrenciaid = $_GET['idrec'];
+                    $recurrente = $_GET['recurrente'];
+
+                    $recurrenciadquery = "UPDATE `recordatoriosp` SET `recurrente`=$recurrente WHERE id=$recurrrenciaid";
+
+                    $db->query($recurrenciadquery);
+                   header("Location: index.php");
                 }
                 //en hstech:
-
                 if (isset($_GET['todo'])) {
                     $sql = "SELECT * FROM `recordatoriosp` WHERE desactivado=1";
                 } //else if(!isset($_GET['todo'])) {
@@ -121,14 +129,8 @@ if ($_POST) {
                 }
 
                 if (isset($_POST['busqueda'])) {
-
                     $BusquedaParcial = (string)$_POST['busqueda'];
-
-//                    var_dump($BusquedaParcial);
-//                    echo 'valor es' . $BusquedaParcial;
-
-                    $sql = "SELECT * FROM `recordatoriosp` WHERE desactivado=1 AND asunto LIKE '%" . $BusquedaParcial . "%' OR  mensaje LIKE '%" . $BusquedaParcial . "%'";
-
+                    $sql = "SELECT * FROM `recordatoriosp` WHERE desactivado=1 and asunto LIKE '%" . $BusquedaParcial . "%' or  mensaje LIKE '%" . $BusquedaParcial . "%'";
                 }
 
                 $featured = $db->query($sql);
@@ -166,6 +168,7 @@ if ($_POST) {
                             <?= $mensaje; ?>
                             <a style="display: none;" data-ajax="false" href="index.php?delete&id=<?= $id; ?>"
                                class="eliminar">
+
                                 <span class="glyphicon glyphicon-trash pull-right"></span>
 
                                 <a style="display: none;" data-ajax="false" href="index.php?editar&id=<?= $id; ?>"
@@ -176,9 +179,17 @@ if ($_POST) {
                         <td>
                             <?php
                             if ($recurrente == '1') {
-                                ?> <span class="glyphicon glyphicon-thumbs-up pull-left"></span> <?php
-                            } else {
-                                ?> <span class="glyphicon glyphicon-thumbs-down pull-left"></span> <?php
+                                ?>
+                                <a data-ajax="false" href="index.php?recurrente=0&idrec=<?= $id; ?>">
+                                    <span class="glyphicon glyphicon-thumbs-up pull-left"></span>
+                                </a>
+                                <?php
+                            } else if ($recurrente == '0') {
+                                ?>
+                                <a data-ajax="false" href="index.php?recurrente=1&idrec=<?= $id; ?>">
+                                    <span class="glyphicon glyphicon-thumbs-down pull-left"></span>
+                                </a>
+                                <?php
                             }
                             ?>
                         </td>
@@ -186,8 +197,6 @@ if ($_POST) {
                     </tr>
 
                 <?php
-
-
                 endwhile;
                 $numero = 0; ?>
 
