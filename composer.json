@@ -1,0 +1,14 @@
+{
+  "name": "vendor_name/Recordatorios",
+  "description": "description",
+  "minimum-stability": "stable",
+  "license": "proprietary",
+  "authors": [
+    {
+      "name": "Alex Hs",
+      "email": "email@example.com"
+    }
+  ],
+  "require": {
+  }
+}

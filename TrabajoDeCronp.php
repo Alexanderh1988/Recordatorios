@@ -17,10 +17,7 @@ while ($dato = mysqli_fetch_assoc($featured)):
     $mensaje = $dato['mensaje'];
     $desactivado = $dato['desactivado'];
     $recurrente = $dato['recurrente'];
-
-    //echo '(int)$time: ' . (int)$time;
-    //echo '|';
-    //echo 'time() : ' . time();
+    $interval_time = $dato['interval_time'];
 
     if (((int)strtotime($fecha) + 14000 < time() && strtotime($fecha) != strtotime("0000-00-00")) || ((int)$time < time() && $time != '0')) {
 
@@ -36,12 +33,14 @@ while ($dato = mysqli_fetch_assoc($featured)):
             $insertsql2 = "UPDATE `recordatoriosp` SET `desactivado`='0' WHERE id=$id";
         } else { //se repite
             if (strtotime($fecha) == strtotime("0000-00-00")) { //se establecio por periodos fijos, se vuele a repetir en 20 dias mas
-                $time = strval((int)$time + 1800000 - 8000);
-                $insertsql2 = "UPDATE `recordatoriosp` SET  `time`= $time  WHERE id=$id";
-            } else {   // una vez al año
-                $fecha = (string)date("Y-m-d", substr(strval(strtotime($fecha) + 31556926), 0, 10));
-                $insertsql2 = "UPDATE `recordatoriosp` SET  `fecha`=$fecha WHERE id=$id";
+                //    $time = strval((int)$time + 1800000 - 8000);
+                $time = strval((int)$time + (int)$interval_time);
+                $insertsql2 = "UPDATE `recordatoriosp` SET  `time`= $time,`recurrente`= `1` WHERE id=$id";
             }
+            //   else {   // una vez al año
+            //        $fecha = (string)date("Y-m-d", substr(strval(strtotime($fecha) + 31556926), 0, 10));
+            //        $insertsql2 = "UPDATE `recordatoriosp` SET  `fecha`=$fecha WHERE id=$id";
+            //    }
         }
         $db->query($insertsql2);
     }

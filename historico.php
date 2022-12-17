@@ -1,7 +1,8 @@
   <?php
   //servidor
-  require_once $_SERVER['DOCUMENT_ROOT'].'/Recordatorios/core/init.php';
-  
+  //require_once $_SERVER['DOCUMENT_ROOT'].'/Recordatorios/core/init.php';
+  require_once 'core/init.php';
+  $factor = 86400;
   ?>
   <head> 
     <title>Recordatorios</title>  
@@ -62,7 +63,7 @@
 
      <!--  <form action="index.php" method="post">  -->
 
-      <form action="index.php" method="post">
+      <form action="#" method="post">
 
         <table data-role="table" class="ui-responsive table-stroke">
 
@@ -70,10 +71,12 @@
           <thead>
             <tr>
 
-              <th>Asunto</th>           
-              <th>Dias de aviso</th>           
-              <th>Fecha de control</th>           
-              <th>Mensaje</th> 
+              <th style="width: 20%;">Asunto</th>
+                    <th style="width: 10%;">Dias de aviso</th>
+                    <th style="width: 10%;">Fecha de control</th>
+                    <th style="width: 10%;">Fecha ingreso</th>
+                    <th style="width: 50%;">Mensaje</th>
+                    <th style="width: 5%;">Recurrente</th>
 
               <!-- aca no funciona post -->
 
@@ -85,9 +88,16 @@
 
            <?php 
 
-            //en hstech:
-           $sql = "SELECT * FROM rememberhstech WHERE desactivado=0";
+                     if (isset($_POST['busqueda'])) {
+                    $BusquedaParcial = filter_var((string)$_POST['busqueda'], FILTER_SANITIZE_STRING);
 
+                    $sql = "SELECT * FROM `recordatoriosp` WHERE asunto LIKE '%" . $BusquedaParcial . "%' or  mensaje LIKE '%" . $BusquedaParcial . "%'";
+                } 
+                else {
+
+            //en hstech:
+           $sql = "SELECT * FROM recordatoriosp WHERE desactivado=0";
+}
 
            $featured = $db->query($sql);   
            $total=0;
@@ -124,6 +134,23 @@ $time = $dato['time'];
               <td><?= $fecha; ?></td>      				
               <td><?= $mensaje; ?></td>
 
+             <td>
+                            <?php
+                            if ($recurrente == '1') {
+                                ?>
+                                <a data-ajax="false" href="index.php?recurrente=0&idrec=<?= $id; ?>">
+                                    <span class="glyphicon glyphicon-thumbs-up pull-left"></span>
+                                </a>
+                                <?php
+                            } else if ($recurrente == '0') {
+                                ?>
+                                <a data-ajax="false" href="index.php?recurrente=1&idrec=<?= $id; ?>">
+                                    <span class="glyphicon glyphicon-thumbs-down pull-left"></span>
+                                </a>
+                                <?php
+                            }
+                            ?>
+                        </td>
             
             </tr>
 
@@ -147,6 +174,10 @@ $time = $dato['time'];
 
       
         ?>
+
+            <input type="text" data-mini="false" data-role="none" placeholder="Escriba" name="busqueda">
+
+  <button data-theme="c" data-mini="false" value="submit" type="submit" data-inline="true">Buscar</button>
 
 <a data-theme="e" rel="external" href="historico.php" data-role="button" data-inline="true" data-theme="b">Actualizar</a>
         
